@@ -15,15 +15,14 @@ import {
   LogOut,
   BarChart3,
   LineChart,
-  Eye,
-  User,
+  Shield,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 export default function Dashboard() {
   const router = useRouter()
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleString())
-  const [userMode, setUserMode] = useState<"demo" | "admin">("demo")
+  const [userEmail, setUserEmail] = useState("")
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   // Update time every second
@@ -40,6 +39,7 @@ export default function Dashboard() {
     const userInfo = localStorage.getItem("user")
 
     if (!authToken || !userInfo) {
+      // No authentication found, redirect to login
       router.push("/")
       return
     }
@@ -47,17 +47,20 @@ export default function Dashboard() {
     try {
       const user = JSON.parse(userInfo)
       if (user.authenticated) {
-        setUserMode(user.mode || "demo")
+        setUserEmail(user.email)
         setIsAuthenticated(true)
       } else {
+        // Invalid authentication, redirect to login
         router.push("/")
       }
     } catch (error) {
+      // Invalid user data, redirect to login
       router.push("/")
     }
   }, [router])
 
   const handleLogout = () => {
+    // Clear all authentication data
     localStorage.removeItem("authToken")
     localStorage.removeItem("user")
     router.push("/")
@@ -77,7 +80,7 @@ export default function Dashboard() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading platform...</p>
+          <p className="text-gray-600">Verifying access credentials...</p>
         </div>
       </div>
     )
@@ -95,19 +98,16 @@ export default function Dashboard() {
               </div>
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-orange-600 to-blue-600 bg-clip-text text-transparent">
-                  PV Monitor Pro
+                  Solar Monitor Pro
                 </h1>
-                <p className="text-xs text-gray-500">HTWK Laboratory - ENIS</p>
+                <p className="text-xs text-gray-500">Advanced Solar Monitoring Platform</p>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              <Badge
-                variant="outline"
-                className={userMode === "demo" ? "text-green-600 border-green-200" : "text-blue-600 border-blue-200"}
-              >
-                {userMode === "demo" ? <Eye className="h-3 w-3 mr-1" /> : <User className="h-3 w-3 mr-1" />}
-                {userMode === "demo" ? "Demo Mode" : "Developer"}
+              <Badge variant="outline" className="text-green-600 border-green-200">
+                <Shield className="h-3 w-3 mr-1" />
+                Authorized
               </Badge>
               <Badge variant="outline" className="text-blue-600 border-blue-200">
                 <Wifi className="h-3 w-3 mr-1" />
@@ -116,7 +116,7 @@ export default function Dashboard() {
               <span className="text-sm text-gray-600">{currentTime}</span>
               <Button variant="ghost" size="sm" onClick={handleLogout}>
                 <LogOut className="h-4 w-4 mr-2" />
-                Exit
+                Logout
               </Button>
             </div>
           </div>
@@ -127,22 +127,10 @@ export default function Dashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {userMode === "demo" ? "Welcome to the Demo! 🌟" : "Welcome back, Maissa! 👋"}
-          </h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Solar System Dashboard 🌞</h2>
           <p className="text-gray-600">
-            {userMode === "demo"
-              ? "Explore this photovoltaic monitoring platform with advanced AI-powered analytics"
-              : "Monitor your photovoltaic systems with advanced AI-powered analytics"}
+            Monitor your solar installations with advanced AI-powered analytics and real-time data
           </p>
-          {userMode === "demo" && (
-            <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-green-800 text-sm">
-                🎓 <strong>This is a graduation project demo</strong> - Developed by Maissa Rhaiem (ENIS) for HTWK
-                Laboratory. All features are fully functional with simulated data.
-              </p>
-            </div>
-          )}
         </div>
 
         {/* Stats Overview */}
@@ -175,7 +163,7 @@ export default function Dashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-green-100 text-sm font-medium">Efficiency</p>
+                  <p className="text-green-100 text-sm font-medium">System Efficiency</p>
                   <p className="text-2xl font-bold">94.2%</p>
                 </div>
                 <TrendingUp className="h-8 w-8 text-green-200" />
@@ -209,16 +197,16 @@ export default function Dashboard() {
                   <BarChart3 className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl">Real-time Data Monitoring</CardTitle>
-                  <CardDescription>Live data from PV inverters {userMode === "demo" && "(Simulated)"}</CardDescription>
+                  <CardTitle className="text-xl">Real-time Solar Monitoring</CardTitle>
+                  <CardDescription>Live data from your solar panel systems</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <p className="text-gray-600">
-                  Access live data streams from photovoltaic inverters including power generation, voltage levels,
-                  current measurements, and system performance metrics.
+                  Access live data streams from your solar installations including power generation, voltage levels,
+                  current measurements, and environmental conditions.
                 </p>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -251,10 +239,8 @@ export default function Dashboard() {
                   <LineChart className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl">AI Predictive Analytics</CardTitle>
-                  <CardDescription>
-                    Machine learning powered forecasts {userMode === "demo" && "(Demo)"}
-                  </CardDescription>
+                  <CardTitle className="text-xl">AI Energy Forecasting</CardTitle>
+                  <CardDescription>Machine learning powered energy predictions</CardDescription>
                 </div>
               </div>
             </CardHeader>
@@ -262,7 +248,7 @@ export default function Dashboard() {
               <div className="space-y-4">
                 <p className="text-gray-600">
                   Advanced AI algorithms analyze historical data, weather patterns, and system performance to provide
-                  accurate predictions for energy generation and maintenance needs.
+                  accurate predictions for energy generation optimization.
                 </p>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -285,53 +271,53 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Project Information */}
+        {/* System Information */}
         <Card className="bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Database className="h-5 w-5" />
-              Project Information
+              System Information
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">👩‍🎓 Student Information</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">🔋 Solar Installation</h4>
                 <p className="text-sm text-gray-600">
-                  <strong>Name:</strong> Maissa Rhaiem
+                  <strong>Total Capacity:</strong> 50 kW
                 </p>
                 <p className="text-sm text-gray-600">
-                  <strong>Institution:</strong> ENIS (École Nationale d'Ingénieurs de Sfax)
+                  <strong>Panel Count:</strong> 200 units
                 </p>
                 <p className="text-sm text-gray-600">
-                  <strong>Project Type:</strong> Graduation Project
-                </p>
-              </div>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2">🔬 Laboratory</h4>
-                <p className="text-sm text-gray-600">
-                  <strong>Lab:</strong> HTWK Laboratory
-                </p>
-                <p className="text-sm text-gray-600">
-                  <strong>Focus:</strong> Renewable Energy & AI
-                </p>
-                <p className="text-sm text-gray-600">
-                  <strong>Technology:</strong> Next.js, TypeScript, AI
+                  <strong>Installation Type:</strong> Rooftop Grid-Tied
                 </p>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">🌐 Demo Status</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">🤖 AI Technology</h4>
+                <p className="text-sm text-gray-600">
+                  <strong>Prediction Models:</strong> Neural Networks
+                </p>
+                <p className="text-sm text-gray-600">
+                  <strong>Data Processing:</strong> Real-time Analytics
+                </p>
+                <p className="text-sm text-gray-600">
+                  <strong>Forecasting:</strong> Weather-based ML
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">📊 System Status</h4>
                 <div className="flex items-center gap-2 mb-1">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Platform: Online</span>
+                  <span className="text-sm text-gray-600">Data Collection: Active</span>
                 </div>
                 <div className="flex items-center gap-2 mb-1">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Data Simulation: Active</span>
+                  <span className="text-sm text-gray-600">AI Models: Operational</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">AI Models: Operational</span>
+                  <span className="text-sm text-gray-600">Monitoring: 24/7 Active</span>
                 </div>
               </div>
             </div>

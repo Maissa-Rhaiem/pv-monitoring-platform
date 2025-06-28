@@ -12,7 +12,6 @@ import {
   Calendar,
   Sun,
   CloudRain,
-  AlertCircle,
   CheckCircle,
   BarChart3,
   LineChart,
@@ -28,17 +27,9 @@ interface PredictionData {
   temperature: number
 }
 
-interface MaintenanceAlert {
-  component: string
-  severity: "low" | "medium" | "high"
-  predictedDate: string
-  description: string
-}
-
 export default function PredictivePage() {
   const router = useRouter()
   const [predictions, setPredictions] = useState<PredictionData[]>([])
-  const [maintenanceAlerts, setMaintenanceAlerts] = useState<MaintenanceAlert[]>([])
   const [modelAccuracy, setModelAccuracy] = useState(97.8)
   const [lastModelUpdate, setLastModelUpdate] = useState(new Date())
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -82,44 +73,8 @@ export default function PredictivePage() {
       }))
     }
 
-    // Simulate maintenance alerts
-    const generateMaintenanceAlerts = (): MaintenanceAlert[] => [
-      {
-        component: "Inverter #2",
-        severity: "medium",
-        predictedDate: "2024-02-15",
-        description: "Efficiency degradation detected. Recommend inspection within 2 weeks.",
-      },
-      {
-        component: "Panel Array A",
-        severity: "low",
-        predictedDate: "2024-03-01",
-        description: "Cleaning recommended based on dust accumulation patterns.",
-      },
-      {
-        component: "DC Combiner Box",
-        severity: "high",
-        predictedDate: "2024-01-20",
-        description: "Temperature anomaly detected. Immediate inspection required.",
-      },
-    ]
-
     setPredictions(generatePredictions())
-    setMaintenanceAlerts(generateMaintenanceAlerts())
   }, [isAuthenticated])
-
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case "high":
-        return "bg-red-100 text-red-800 border-red-200"
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200"
-      case "low":
-        return "bg-blue-100 text-blue-800 border-blue-200"
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200"
-    }
-  }
 
   const getWeatherIcon = (weather: string) => {
     switch (weather) {
@@ -142,7 +97,7 @@ export default function PredictivePage() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Verifying secure access...</p>
+          <p className="text-gray-600">Verifying access...</p>
         </div>
       </div>
     )
@@ -166,7 +121,7 @@ export default function PredictivePage() {
             <div className="flex items-center gap-4">
               <Badge variant="outline" className="text-green-600 border-green-200">
                 <Shield className="h-3 w-3 mr-1" />
-                Secure Session
+                Authorized Access
               </Badge>
               <Badge variant="outline" className="text-purple-600 border-purple-200">
                 <Brain className="h-3 w-3 mr-1" />
@@ -222,14 +177,10 @@ export default function PredictivePage() {
         </div>
 
         <Tabs defaultValue="predictions" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="predictions" className="flex items-center gap-2">
               <LineChart className="h-4 w-4" />
               Energy Predictions
-            </TabsTrigger>
-            <TabsTrigger value="maintenance" className="flex items-center gap-2">
-              <AlertCircle className="h-4 w-4" />
-              Maintenance Alerts
             </TabsTrigger>
             <TabsTrigger value="models" className="flex items-center gap-2">
               <Brain className="h-4 w-4" />
@@ -245,7 +196,7 @@ export default function PredictivePage() {
                   7-Day Energy Production Forecast
                 </CardTitle>
                 <CardDescription>
-                  AI-powered predictions based on weather data, historical performance, and system health
+                  AI-powered predictions based on weather data, historical performance, and system analysis
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -293,54 +244,6 @@ export default function PredictivePage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="maintenance" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <AlertCircle className="h-5 w-5" />
-                  Predictive Maintenance Alerts
-                </CardTitle>
-                <CardDescription>
-                  AI-driven maintenance recommendations based on system performance analysis
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {maintenanceAlerts.map((alert, index) => (
-                    <Card
-                      key={index}
-                      className={`border-l-4 ${
-                        alert.severity === "high"
-                          ? "border-l-red-500"
-                          : alert.severity === "medium"
-                            ? "border-l-yellow-500"
-                            : "border-l-blue-500"
-                      }`}
-                    >
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between">
-                          <div className="space-y-2 flex-1">
-                            <div className="flex items-center gap-3">
-                              <h4 className="font-semibold text-gray-900">{alert.component}</h4>
-                              <Badge className={getSeverityColor(alert.severity)}>{alert.severity.toUpperCase()}</Badge>
-                            </div>
-                            <p className="text-sm text-gray-600">{alert.description}</p>
-                            <p className="text-xs text-gray-500">
-                              Predicted maintenance date: {new Date(alert.predictedDate).toLocaleDateString()}
-                            </p>
-                          </div>
-                          <Button size="sm" variant="outline">
-                            Schedule
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
           <TabsContent value="models" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card>
@@ -349,7 +252,7 @@ export default function PredictivePage() {
                     <Brain className="h-5 w-5" />
                     Active AI Models
                   </CardTitle>
-                  <CardDescription>Neural networks powering the predictions</CardDescription>
+                  <CardDescription>Neural networks powering the energy predictions</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="p-4 bg-green-50 rounded-lg border border-green-200">
@@ -375,17 +278,17 @@ export default function PredictivePage() {
                   <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <div className="flex items-center gap-2 mb-2">
                       <CheckCircle className="h-4 w-4 text-blue-500" />
-                      <span className="font-medium">Maintenance Prediction Model</span>
+                      <span className="font-medium">Weather Integration Model</span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">Random Forest model for component failure prediction</p>
+                    <p className="text-sm text-gray-600 mb-2">Advanced weather pattern analysis for forecasting</p>
                     <div className="grid grid-cols-2 gap-4 text-xs">
                       <div>
                         <span className="text-gray-500">Accuracy:</span>
-                        <span className="font-medium ml-1">94.2%</span>
+                        <span className="font-medium ml-1">95.4%</span>
                       </div>
                       <div>
                         <span className="text-gray-500">Last Training:</span>
-                        <span className="font-medium ml-1">Jan 10, 2024</span>
+                        <span className="font-medium ml-1">Jan 12, 2024</span>
                       </div>
                     </div>
                   </div>
@@ -394,7 +297,7 @@ export default function PredictivePage() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Secure API Integration Status</CardTitle>
+                  <CardTitle>Data Integration Status</CardTitle>
                   <CardDescription>External data sources for AI models</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -409,7 +312,7 @@ export default function PredictivePage() {
                   <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
                     <CheckCircle className="h-5 w-5 text-green-500" />
                     <div>
-                      <p className="font-medium text-green-900">Historical Data API</p>
+                      <p className="font-medium text-green-900">Historical Data</p>
                       <p className="text-sm text-green-600">Connected - 2 years of data</p>
                     </div>
                   </div>
@@ -417,7 +320,7 @@ export default function PredictivePage() {
                   <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
                     <CheckCircle className="h-5 w-5 text-green-500" />
                     <div>
-                      <p className="font-medium text-green-900">ML Pipeline API</p>
+                      <p className="font-medium text-green-900">ML Pipeline</p>
                       <p className="text-sm text-green-600">Active - Processing predictions</p>
                     </div>
                   </div>
@@ -430,3 +333,4 @@ export default function PredictivePage() {
     </div>
   )
 }
+

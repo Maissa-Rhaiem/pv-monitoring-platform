@@ -7,58 +7,57 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Sun, Zap, Brain, Shield, Eye, User } from "lucide-react"
+import { Sun, Zap, Brain, Shield, AlertCircle, Lock } from "lucide-react"
 import { useRouter } from "next/navigation"
+
+// Single valid credential - only for the developer
+const VALID_CREDENTIAL = {
+  email: "admin@solarmonitor.com",
+  secretCode: "SOLAR_SECURE_2024",
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [secretCode, setSecretCode] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [accessMode, setAccessMode] = useState<"demo" | "admin">("demo")
+  const [error, setError] = useState("")
   const router = useRouter()
 
-  const handleDemoAccess = () => {
-    setIsLoading(true)
-    // Allow demo access without credentials
-    setTimeout(() => {
-      localStorage.setItem("authToken", "demo-access")
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          email: "demo@visitor",
-          loginTime: new Date().toISOString(),
-          authenticated: true,
-          mode: "demo",
-        }),
-      )
-      setIsLoading(false)
-      router.push("/dashboard")
-    }, 1000)
-  }
-
-  const handleAdminLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError("")
 
-    // Admin credentials for developer
-    const isAdmin = email === "maissa.rhaiem@enis.tn" && password === "HTWK2024!"
+    // Validate input
+    if (!email.trim() || !secretCode.trim()) {
+      setError("Please enter both email address and secret code")
+      setIsLoading(false)
+      return
+    }
 
+    // Check credentials against the single valid credential
+    const isValidCredential =
+      email.trim() === VALID_CREDENTIAL.email && secretCode.trim() === VALID_CREDENTIAL.secretCode
+
+    // Simulate authentication delay
     setTimeout(() => {
-      if (isAdmin) {
-        localStorage.setItem("authToken", "admin-access")
+      if (isValidCredential) {
+        // Store authentication token
+        const authToken = btoa(`${email}:${Date.now()}`) // Simple token
+        localStorage.setItem("authToken", authToken)
         localStorage.setItem(
           "user",
           JSON.stringify({
             email,
             loginTime: new Date().toISOString(),
             authenticated: true,
-            mode: "admin",
           }),
         )
+
         setIsLoading(false)
         router.push("/dashboard")
       } else {
-        alert("Invalid admin credentials")
+        setError("Access denied. Invalid credentials.")
         setIsLoading(false)
       }
     }, 1500)
@@ -67,7 +66,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center p-4">
       <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
-        {/* Left side - Branding */}
+        {/* Left side - Platform Information */}
         <div className="space-y-8 text-center lg:text-left">
           <div className="space-y-4">
             <div className="flex items-center justify-center lg:justify-start gap-3">
@@ -75,16 +74,16 @@ export default function LoginPage() {
                 <Sun className="h-8 w-8 text-white" />
               </div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-blue-600 bg-clip-text text-transparent">
-                PV Monitor Pro
+                Solar Monitor Pro
               </h1>
             </div>
-            <p className="text-xl text-gray-600">Advanced Photovoltaic Monitoring & AI Analytics Platform</p>
+            <p className="text-xl text-gray-600">Advanced Solar System Monitoring with AI Analytics</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="flex flex-col items-center p-4 bg-white/50 rounded-lg backdrop-blur-sm">
               <Zap className="h-8 w-8 text-orange-500 mb-2" />
-              <span className="text-sm font-medium text-gray-700">Real-time Data</span>
+              <span className="text-sm font-medium text-gray-700">Real-time Monitoring</span>
             </div>
             <div className="flex flex-col items-center p-4 bg-white/50 rounded-lg backdrop-blur-sm">
               <Brain className="h-8 w-8 text-blue-500 mb-2" />
@@ -92,123 +91,92 @@ export default function LoginPage() {
             </div>
             <div className="flex flex-col items-center p-4 bg-white/50 rounded-lg backdrop-blur-sm">
               <Shield className="h-8 w-8 text-green-500 mb-2" />
-              <span className="text-sm font-medium text-gray-700">Public Demo</span>
+              <span className="text-sm font-medium text-gray-700">Exclusive Access</span>
             </div>
           </div>
 
-          <div className="space-y-2 text-sm text-gray-600 bg-white/30 p-4 rounded-lg">
-            <p>
-              <strong>🎓 Developed by:</strong> Maissa Rhaiem
-            </p>
-            <p>
-              <strong>🏫 Institution:</strong> ENIS (École Nationale d'Ingénieurs de Sfax)
-            </p>
-            <p>
-              <strong>🔬 Laboratory:</strong> HTWK Laboratory
-            </p>
-            <p>
-              <strong>📋 Project:</strong> Graduation Project - PV Monitoring System
-            </p>
-            <p className="text-blue-600 font-medium">
-              <strong>🌐 Public Demo:</strong> Available for everyone to explore
-            </p>
+          <div className="space-y-4 text-sm text-gray-600 bg-white/30 p-6 rounded-lg">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Platform Capabilities</h3>
+            <div className="grid grid-cols-1 gap-3">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                <span>Real-time solar panel performance monitoring</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span>AI-powered energy production forecasting</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Advanced system analytics and reporting</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span>Comprehensive performance optimization</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Right side - Access Options */}
-        <div className="space-y-4">
-          {/* Demo Access Card */}
-          <Card className="w-full max-w-md mx-auto shadow-2xl border-2 border-green-200 bg-white/90 backdrop-blur-sm">
-            <CardHeader className="space-y-1 text-center">
-              <CardTitle className="text-2xl font-bold text-green-700 flex items-center justify-center gap-2">
-                <Eye className="h-6 w-6" />
-                Public Demo Access
-              </CardTitle>
-              <CardDescription>Explore the platform - No credentials required</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button
-                onClick={handleDemoAccess}
-                className="w-full h-12 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-lg"
-                disabled={isLoading && accessMode === "demo"}
-              >
-                {isLoading && accessMode === "demo" ? "Loading Demo..." : "🚀 Enter Demo Platform"}
-              </Button>
-              <p className="text-center text-sm text-gray-600 mt-3">✨ Full access to all features and interfaces</p>
-            </CardContent>
-          </Card>
+        {/* Right side - Secure Login Form */}
+        <Card className="w-full max-w-md mx-auto shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
+          <CardHeader className="space-y-1 text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Lock className="h-6 w-6 text-gray-600" />
+              <CardTitle className="text-2xl font-bold">Authorized Access Only</CardTitle>
+            </div>
+            <CardDescription>Enter your credentials to access the solar monitoring platform</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              {error && (
+                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <AlertCircle className="h-4 w-4 text-red-500" />
+                  <span className="text-sm text-red-700">{error}</span>
+                </div>
+              )}
 
-          {/* Admin Access Card */}
-          <Card className="w-full max-w-md mx-auto shadow-xl border border-gray-200 bg-white/80 backdrop-blur-sm">
-            <CardHeader className="space-y-1 text-center">
-              <CardTitle className="text-lg font-bold text-gray-700 flex items-center justify-center gap-2">
-                <User className="h-5 w-5" />
-                Developer Access
-              </CardTitle>
-              <CardDescription className="text-sm">For Maissa Rhaiem (Developer Only)</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleAdminLogin} className="space-y-3">
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm">
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Developer email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="h-10 text-sm"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm">
-                    Password
-                  </Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Developer password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="h-10 text-sm"
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  className="w-full h-10 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-sm"
-                  disabled={isLoading && accessMode === "admin"}
-                  onClick={() => setAccessMode("admin")}
-                >
-                  {isLoading && accessMode === "admin" ? "Authenticating..." : "Admin Login"}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-
-          {/* Info Card */}
-          <Card className="w-full max-w-md mx-auto bg-blue-50 border-blue-200">
-            <CardContent className="p-4">
-              <div className="text-center space-y-2">
-                <h4 className="font-semibold text-blue-900">🌟 Welcome Visitors!</h4>
-                <p className="text-sm text-blue-700">
-                  This is a live demonstration of a photovoltaic monitoring platform developed as a graduation project.
-                  Feel free to explore all features!
-                </p>
-                <div className="flex justify-center gap-4 text-xs text-blue-600 mt-3">
-                  <span>📊 Real-time Data</span>
-                  <span>🤖 AI Predictions</span>
-                  <span>📱 Responsive Design</span>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="h-11"
+                />
               </div>
-            </CardContent>
-          </Card>
-        </div>
+              <div className="space-y-2">
+                <Label htmlFor="secretCode">Access Code</Label>
+                <Input
+                  id="secretCode"
+                  type="password"
+                  placeholder="Enter your access code"
+                  value={secretCode}
+                  onChange={(e) => setSecretCode(e.target.value)}
+                  required
+                  className="h-11"
+                />
+              </div>
+              <Button
+                type="submit"
+                className="w-full h-11 bg-gradient-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600"
+                disabled={isLoading}
+              >
+                {isLoading ? "Authenticating..." : "Access Platform"}
+              </Button>
+            </form>
+
+            <div className="mt-6 p-4 bg-gray-50 rounded-lg text-center">
+              <p className="text-sm text-gray-600">🔒 This platform requires authorized credentials for access</p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
 }
+
 
