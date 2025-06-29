@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation"
 // Single valid credential - only for the developer
 const VALID_CREDENTIAL = {
   email: "admin@solarmonitor.com",
-  secretCode: "SOLAR_SECURE_2024",
+  secretCode: "HTWK_2025",
 }
 
 export default function LoginPage() {
@@ -74,10 +74,10 @@ export default function LoginPage() {
                 <Sun className="h-8 w-8 text-white" />
               </div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-blue-600 bg-clip-text text-transparent">
-                Solar Monitor Pro
+                HTWK_Solar Monitoring Platform
               </h1>
             </div>
-            <p className="text-xl text-gray-600">Advanced Solar System Monitoring with AI Analytics</p>
+            <p className="text-xl text-gray-600"></p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
