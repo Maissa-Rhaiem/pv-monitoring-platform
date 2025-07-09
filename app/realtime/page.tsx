@@ -147,7 +147,7 @@ export default function RealTimePage() {
                 <div>
                   <p className="text-orange-100 text-sm">Current Power</p>
                   <p className="text-2xl font-bold">{data.power.toFixed(0)} W</p>
-                  <p className="text-xs text-orange-200">Target: 4000W</p>
+                  <p className="text-xs text-orange-200">Target: 1100W</p>
                 </div>
                 <Zap className="h-8 w-8 text-orange-200" />
               </div>
@@ -160,7 +160,7 @@ export default function RealTimePage() {
                 <div>
                   <p className="text-blue-100 text-sm">Voltage</p>
                   <p className="text-2xl font-bold">{data.voltage.toFixed(1)} V</p>
-                  <p className="text-xs text-blue-200">Range: 220-250V</p>
+                  <p className="text-xs text-blue-200">Range: 200-2..V</p>
                 </div>
                 <Gauge className="h-8 w-8 text-blue-200" />
               </div>
@@ -173,7 +173,7 @@ export default function RealTimePage() {
                 <div>
                   <p className="text-green-100 text-sm">Current</p>
                   <p className="text-2xl font-bold">{data.current.toFixed(1)} A</p>
-                  <p className="text-xs text-green-200">Max: 20A</p>
+                  <p className="text-xs text-green-200">Max: 5.3 A</p>
                 </div>
                 <Activity className="h-8 w-8 text-green-200" />
               </div>
@@ -207,7 +207,7 @@ export default function RealTimePage() {
             <CardContent className="space-y-6">
               <div>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium">Panel Temperature</span>
+                  <span className="text-sm font-medium">Produced Power</span>
                   <span className={`text-sm font-bold ${getStatusColor(data.temperature, 20, 60)}`}>
                     {data.temperature.toFixed(1)}°C
                   </span>

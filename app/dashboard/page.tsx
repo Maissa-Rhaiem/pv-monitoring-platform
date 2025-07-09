@@ -139,8 +139,8 @@ export default function Dashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-orange-100 text-sm font-medium">Current Power</p>
-                  <p className="text-2xl font-bold">4.2 kW</p>
+                  <p className="text-orange-100 text-sm font-medium">Produced Power</p>
+                  <p className="text-2xl font-bold">.. W</p>
                 </div>
                 <Zap className="h-8 w-8 text-orange-200" />
               </div>
@@ -151,8 +151,8 @@ export default function Dashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-blue-100 text-sm font-medium">Daily Energy</p>
-                  <p className="text-2xl font-bold">28.5 kWh</p>
+                  <p className="text-blue-100 text-sm font-medium">Consuption Power</p>
+                  <p className="text-2xl font-bold">..W</p>
                 </div>
                 <Activity className="h-8 w-8 text-blue-200" />
               </div>
@@ -163,8 +163,8 @@ export default function Dashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-green-100 text-sm font-medium">System Efficiency</p>
-                  <p className="text-2xl font-bold">94.2%</p>
+                  <p className="text-green-100 text-sm font-medium">AC Current Value</p>
+                  <p className="text-2xl font-bold">.. A</p>
                 </div>
                 <TrendingUp className="h-8 w-8 text-green-200" />
               </div>
@@ -175,8 +175,8 @@ export default function Dashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-purple-100 text-sm font-medium">AI Accuracy</p>
-                  <p className="text-2xl font-bold">97.8%</p>
+                  <p className="text-purple-100 text-sm font-medium">AC V oltage Value</p>
+                  <p className="text-2xl font-bold">.. V</p>
                 </div>
                 <Brain className="h-8 w-8 text-purple-200" />
               </div>
@@ -205,14 +205,13 @@ export default function Dashboard() {
             <CardContent>
               <div className="space-y-4">
                 <p className="text-gray-600">
-                  Access live data streams from your solar installations including power generation, voltage levels,
-                  current measurements, and environmental conditions.
+                  Monitor real-time data from your solar installations, such as power output, voltage, and current measurements
                 </p>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-3 bg-orange-50 rounded-lg">
                     <p className="text-sm text-orange-600 font-medium">Live Updates</p>
-                    <p className="text-xs text-gray-600">Every 2 seconds</p>
+                    <p className="text-xs text-gray-600">Every .. seconds</p>
                   </div>
                   <div className="p-3 bg-red-50 rounded-lg">
                     <p className="text-sm text-red-600 font-medium">Data Points</p>
@@ -240,25 +239,25 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <CardTitle className="text-xl">AI Energy Forecasting</CardTitle>
-                  <CardDescription>Machine learning powered energy predictions</CardDescription>
+                  <CardDescription>Machine learning powered predictions</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <p className="text-gray-600">
-                  Advanced AI algorithms analyze historical data, weather patterns, and system performance to provide
-                  accurate predictions for energy generation optimization.
+                  Advanced AI algorithms analyze historical data,and system performance to provide
+                  accurate predictions for power generation optimization.
                 </p>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-3 bg-blue-50 rounded-lg">
                     <p className="text-sm text-blue-600 font-medium">Forecast Range</p>
-                    <p className="text-xs text-gray-600">Up to 7 days</p>
+                    <p className="text-xs text-gray-600">1 Hour</p>
                   </div>
                   <div className="p-3 bg-purple-50 rounded-lg">
                     <p className="text-sm text-purple-600 font-medium">ML Models</p>
-                    <p className="text-xs text-gray-600">Neural Networks</p>
+                    <p className="text-xs text-gray-600">LSTM</p>
                   </div>
                 </div>
 
@@ -284,25 +283,22 @@ export default function Dashboard() {
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">🔋 Solar Installation</h4>
                 <p className="text-sm text-gray-600">
-                  <strong>Total Capacity:</strong> 50 kW
+                  <strong>Total Capacity:</strong> .. kW
                 </p>
                 <p className="text-sm text-gray-600">
-                  <strong>Panel Count:</strong> 200 units
-                </p>
-                <p className="text-sm text-gray-600">
-                  <strong>Installation Type:</strong> Rooftop Grid-Tied
+                  <strong>Panel Count:</strong> .. units
                 </p>
               </div>
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">🤖 AI Technology</h4>
                 <p className="text-sm text-gray-600">
-                  <strong>Prediction Models:</strong> Neural Networks
+                  <strong>Prediction Models:</strong> LSTM
                 </p>
                 <p className="text-sm text-gray-600">
                   <strong>Data Processing:</strong> Real-time Analytics
                 </p>
                 <p className="text-sm text-gray-600">
-                  <strong>Forecasting:</strong> Weather-based ML
+                  <strong>Forecasting:</strong> Power
                 </p>
               </div>
               <div>
@@ -317,7 +313,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Monitoring: 24/7 Active</span>
+                  <span className="text-sm text-gray-600">Monitoring: Active</span>
                 </div>
               </div>
             </div>
